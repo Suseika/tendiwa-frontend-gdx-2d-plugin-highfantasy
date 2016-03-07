@@ -8,10 +8,10 @@
         <artifactId>parent</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
-    <artifactId>frontend-gdx-2d-plugin-highfantasy</artifactId>
+    <artifactId>frontend-gdx-2d-plugin-roguelike</artifactId>
     <packaging>jar</packaging>
 
-    <name>tendiwa-frontend-gdx-2d-plugin-highfantasy</name>
+    <name>tendiwa-frontend-gdx-2d-plugin-roguelike</name>
     <description>First plugin for the LibGDX-based Tendiwa client</description>
 
     <dependencies>
