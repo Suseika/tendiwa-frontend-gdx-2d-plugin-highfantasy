@@ -13,7 +13,7 @@ class RoguelikePlugin : TendiwaGdxClientPlugin {
         camera: TendiwaCamera,
         vicinity: RenderingVicinity,
         playerVolition: PlayerVolition,
-        KeysSetup: KeysSetup
+        keysSetup: KeysSetup
     ) {
         fun moveCamera(dx: Int, dy: Int): Boolean {
             if (dx != 0 || dy != 0) {
@@ -30,10 +30,10 @@ class RoguelikePlugin : TendiwaGdxClientPlugin {
             }
             return false
         }
-        KeysSetup.addAction(Input.Keys.LEFT, { moveCamera(-1, 0) })
-        KeysSetup.addAction(Input.Keys.RIGHT, { moveCamera(1, 0) })
-        KeysSetup.addAction(Input.Keys.UP, { moveCamera(0, 1) })
-        KeysSetup.addAction(Input.Keys.DOWN, { moveCamera(0, -1) })
+        keysSetup.addAction(Input.Keys.LEFT, { moveCamera(-1, 0) })
+        keysSetup.addAction(Input.Keys.RIGHT, { moveCamera(1, 0) })
+        keysSetup.addAction(Input.Keys.UP, { moveCamera(0, 1) })
+        keysSetup.addAction(Input.Keys.DOWN, { moveCamera(0, -1) })
     }
 
 }
