@@ -37,7 +37,6 @@ class RoguelikePlugin : TendiwaGdxClientPlugin {
                     currentTile.x + dx,
                     currentTile.y + dy
                 )
-                println(playerCharacter.position.tile)
                 return true
             }
             return false
