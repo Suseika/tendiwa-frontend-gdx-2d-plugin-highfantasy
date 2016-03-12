@@ -1,6 +1,7 @@
 package org.tendiwa.frontend.gdx.plugin.roguelike
 
 import com.badlogic.gdx.Input
+import org.tendiwa.backend.modules.roguelike.aspects.playerVision
 import org.tendiwa.backend.space.Reality
 import org.tendiwa.backend.space.aspects.position
 import org.tendiwa.client.gdx.TendiwaCamera
@@ -41,6 +42,7 @@ class RoguelikePlugin : TendiwaGdxClientPlugin {
             }
             return false
         }
+        vicinity.fieldOfView = playerCharacter.playerVision.fieldOfView.mask
         keysSetup.addAction(Input.Keys.LEFT, { movePlayerCharacter(-1, 0) })
         keysSetup.addAction(Input.Keys.RIGHT, { movePlayerCharacter(1, 0) })
         keysSetup.addAction(Input.Keys.UP, { movePlayerCharacter(0, 1) })
