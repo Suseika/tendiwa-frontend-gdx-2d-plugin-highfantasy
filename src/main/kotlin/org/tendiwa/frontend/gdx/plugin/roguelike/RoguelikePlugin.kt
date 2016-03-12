@@ -2,14 +2,16 @@ package org.tendiwa.frontend.gdx.plugin.roguelike
 
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.scenes.scene2d.actions.MoveToAction
+import org.tendiwa.backend.modules.roguelike.aspects.PlayerVision
 import org.tendiwa.backend.modules.roguelike.aspects.playerVision
 import org.tendiwa.backend.space.aspects.Position
 import org.tendiwa.backend.space.aspects.position
 import org.tendiwa.client.gdx.TendiwaGame
 import org.tendiwa.client.gdx.TendiwaGdxClientPlugin
 import org.tendiwa.frontend.generic.move
+import org.tendiwa.plane.grid.constructors.centeredGridRectangle
+import org.tendiwa.plane.grid.dimensions.GridDimension
 import org.tendiwa.plane.grid.masks.contains
-import org.tendiwa.plane.grid.rectangles.GridRectangle
 import org.tendiwa.plane.grid.tiles.Tile
 
 class RoguelikePlugin : TendiwaGdxClientPlugin {
@@ -32,15 +34,19 @@ class RoguelikePlugin : TendiwaGdxClientPlugin {
                     if (!game.reality.space.hull.contains(targetTile)) {
                         return false
                     }
-                    camera.position.add(dx.toFloat(), dy.toFloat(), 0f)
-                    vicinity.tileBounds = vicinity.tileBounds.let {
-                        GridRectangle(
-                            it.x + dx,
-                            it.y + dy,
-                            it.width,
-                            it.height
+                    camera.position.set(
+                        targetTile.x.toFloat(),
+                        targetTile.y.toFloat(),
+                        0f
+                    )
+                    vicinity.tileBounds = centeredGridRectangle(
+                        targetTile,
+                        GridDimension(
+                            vicinity.tileBounds.width,
+                            vicinity.tileBounds.height
                         )
-                    }
+                    )
+                    println(vicinity.tileBounds)
                     playerVolition.move(
                         reality,
                         targetTile.x,
@@ -64,13 +70,17 @@ class RoguelikePlugin : TendiwaGdxClientPlugin {
                     }
                 )
                 registerReaction(
-                    Position.Change::class.java,
+                    PlayerVision.Change::class.java,
                     { stimulus ->
-                        vicinity.fieldOfView =
-                            playerCharacter.playerVision.fieldOfView.mask
+                        vicinity.fieldOfView = stimulus.new.mask
                     }
                 )
             }
+            camera.position.set(
+                playerCharacter.position.tile.x.toFloat(),
+                playerCharacter.position.tile.y.toFloat(),
+                0f
+            )
             vicinity.fieldOfView = playerCharacter.playerVision.fieldOfView.mask
             keysSetup.apply {
                 addAction(
