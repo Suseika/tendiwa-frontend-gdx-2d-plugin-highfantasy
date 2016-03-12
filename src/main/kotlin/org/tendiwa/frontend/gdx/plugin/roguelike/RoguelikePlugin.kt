@@ -8,14 +8,30 @@ import org.tendiwa.backend.space.aspects.position
 import org.tendiwa.client.gdx.TendiwaGame
 import org.tendiwa.client.gdx.TendiwaGdxClientPlugin
 import org.tendiwa.frontend.generic.move
+import org.tendiwa.plane.grid.masks.contains
 import org.tendiwa.plane.grid.rectangles.GridRectangle
+import org.tendiwa.plane.grid.tiles.Tile
 
 class RoguelikePlugin : TendiwaGdxClientPlugin {
     override fun init(game: TendiwaGame) {
         game.apply {
             val playerCharacter = reality.hostOf(playerVolition)
-            fun movePlayerCharacter(dx: Int, dy: Int): Boolean {
+            fun movePlayerCharacter(
+                dx: Int,
+                dy: Int,
+                // TODO: Just use the variable from closure when this bug is
+                // TODO: fixed: https://youtrack.jetbrains.com/issue/KT-8689
+                game: TendiwaGame
+            ): Boolean {
                 if (dx != 0 || dy != 0) {
+                    val currentTile = playerCharacter.position.tile
+                    val targetTile = Tile(
+                        currentTile.x + dx,
+                        currentTile.y + dy
+                    )
+                    if (!game.reality.space.hull.contains(targetTile)) {
+                        return false
+                    }
                     camera.position.add(dx.toFloat(), dy.toFloat(), 0f)
                     vicinity.tileBounds = vicinity.tileBounds.let {
                         GridRectangle(
@@ -25,11 +41,10 @@ class RoguelikePlugin : TendiwaGdxClientPlugin {
                             it.height
                         )
                     }
-                    val currentTile = playerCharacter.position.tile
                     playerVolition.move(
                         reality,
-                        currentTile.x + dx,
-                        currentTile.y + dy
+                        targetTile.x,
+                        targetTile.y
                     )
                     return true
                 }
@@ -57,10 +72,24 @@ class RoguelikePlugin : TendiwaGdxClientPlugin {
                 )
             }
             vicinity.fieldOfView = playerCharacter.playerVision.fieldOfView.mask
-            keysSetup.addAction(Input.Keys.LEFT, { movePlayerCharacter(-1, 0) })
-            keysSetup.addAction(Input.Keys.RIGHT, { movePlayerCharacter(1, 0) })
-            keysSetup.addAction(Input.Keys.UP, { movePlayerCharacter(0, 1) })
-            keysSetup.addAction(Input.Keys.DOWN, { movePlayerCharacter(0, -1) })
+            keysSetup.apply {
+                addAction(
+                    Input.Keys.LEFT,
+                    { movePlayerCharacter (-1, 0, game) }
+                )
+                addAction(
+                    Input.Keys.RIGHT,
+                    { movePlayerCharacter(1, 0, game) }
+                )
+                addAction(
+                    Input.Keys.UP,
+                    { movePlayerCharacter(0, 1, game) }
+                )
+                addAction(
+                    Input.Keys.DOWN,
+                    { movePlayerCharacter(0, -1, game) }
+                )
+            }
         }
     }
 }
