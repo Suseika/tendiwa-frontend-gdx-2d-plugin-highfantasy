@@ -35,18 +35,27 @@ class RoguelikePlugin : TendiwaGdxClientPlugin {
                 }
                 return false
             }
-            frontendStimulusMedium.registerReaction(
-                Position.Change::class.java,
-                { stimulus ->
-                    realThingActorRegistry.actorOf(stimulus.host).addAction(
-                        MoveToAction().apply {
-                            x = stimulus.to.x.toFloat()
-                            y = stimulus.to.y.toFloat()
-                            duration = 0.1f
-                        }
-                    )
-                }
-            )
+            frontendStimulusMedium.apply {
+                registerReaction(
+                    Position.Change::class.java,
+                    { stimulus ->
+                        realThingActorRegistry.actorOf(stimulus.host).addAction(
+                            MoveToAction().apply {
+                                x = stimulus.to.x.toFloat()
+                                y = stimulus.to.y.toFloat()
+                                duration = 0.1f
+                            }
+                        )
+                    }
+                )
+                registerReaction(
+                    Position.Change::class.java,
+                    { stimulus ->
+                        vicinity.fieldOfView =
+                            playerCharacter.playerVision.fieldOfView.mask
+                    }
+                )
+            }
             vicinity.fieldOfView = playerCharacter.playerVision.fieldOfView.mask
             keysSetup.addAction(Input.Keys.LEFT, { movePlayerCharacter(-1, 0) })
             keysSetup.addAction(Input.Keys.RIGHT, { movePlayerCharacter(1, 0) })
