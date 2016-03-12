@@ -1,7 +1,9 @@
 package org.tendiwa.frontend.gdx.plugin.roguelike
 
 import com.badlogic.gdx.Input
+import com.badlogic.gdx.scenes.scene2d.actions.MoveToAction
 import org.tendiwa.backend.modules.roguelike.aspects.playerVision
+import org.tendiwa.backend.space.aspects.Position
 import org.tendiwa.backend.space.aspects.position
 import org.tendiwa.client.gdx.TendiwaGame
 import org.tendiwa.client.gdx.TendiwaGdxClientPlugin
@@ -33,6 +35,18 @@ class RoguelikePlugin : TendiwaGdxClientPlugin {
                 }
                 return false
             }
+            frontendStimulusMedium.registerReaction(
+                Position.Change::class.java,
+                { stimulus ->
+                    realThingActorRegistry.actorOf(stimulus.host).addAction(
+                        MoveToAction().apply {
+                            x = stimulus.to.x.toFloat()
+                            y = stimulus.to.y.toFloat()
+                            duration = 0.1f
+                        }
+                    )
+                }
+            )
             vicinity.fieldOfView = playerCharacter.playerVision.fieldOfView.mask
             keysSetup.addAction(Input.Keys.LEFT, { movePlayerCharacter(-1, 0) })
             keysSetup.addAction(Input.Keys.RIGHT, { movePlayerCharacter(1, 0) })
