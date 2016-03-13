@@ -16,6 +16,14 @@ import org.tendiwa.plane.grid.tiles.Tile
 
 class RoguelikePlugin : TendiwaGdxClientPlugin {
     override fun init(game: TendiwaGame) {
+        fun TendiwaGame.centerCameraOnTile(targetTile: Tile) {
+            camera.position.set(
+                targetTile.x.toFloat() + 0.5f,
+                targetTile.y.toFloat() + 0.5f,
+                0f
+            )
+        }
+
         game.apply {
             val playerCharacter = reality.hostOf(playerVolition)
             fun movePlayerCharacter(
@@ -34,11 +42,7 @@ class RoguelikePlugin : TendiwaGdxClientPlugin {
                     if (!game.reality.space.hull.contains(targetTile)) {
                         return false
                     }
-                    camera.position.set(
-                        targetTile.x.toFloat(),
-                        targetTile.y.toFloat(),
-                        0f
-                    )
+                    centerCameraOnTile(targetTile)
                     vicinity.tileBounds = centeredGridRectangle(
                         targetTile,
                         GridDimension(
@@ -46,7 +50,6 @@ class RoguelikePlugin : TendiwaGdxClientPlugin {
                             vicinity.tileBounds.height
                         )
                     )
-                    println(vicinity.tileBounds)
                     playerVolition.move(
                         reality,
                         targetTile.x,
@@ -60,13 +63,15 @@ class RoguelikePlugin : TendiwaGdxClientPlugin {
                 registerReaction(
                     Position.Change::class.java,
                     { stimulus ->
-                        realThingActorRegistry.actorOf(stimulus.host).addAction(
-                            MoveToAction().apply {
-                                x = stimulus.to.x.toFloat()
-                                y = stimulus.to.y.toFloat()
-                                duration = 0.1f
-                            }
-                        )
+                        gridActorRegistry
+                            .actorOf(stimulus.host)
+                            .addAction(
+                                MoveToAction().apply {
+                                    x = stimulus.to.x.toFloat()
+                                    y = stimulus.to.y.toFloat()
+                                    duration = 0.1f
+                                }
+                            )
                     }
                 )
                 registerReaction(
