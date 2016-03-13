@@ -6,11 +6,14 @@ import org.tendiwa.backend.modules.roguelike.aspects.PlayerVision
 import org.tendiwa.backend.modules.roguelike.aspects.playerVision
 import org.tendiwa.backend.space.aspects.Position
 import org.tendiwa.backend.space.aspects.position
+import org.tendiwa.backend.space.chunks.chunkWithTile
+import org.tendiwa.backend.space.realThing.realThings
+import org.tendiwa.backend.space.realThing.viewOfArea
+import org.tendiwa.backend.space.walls.WallType
+import org.tendiwa.backend.space.walls.walls
 import org.tendiwa.client.gdx.TendiwaGame
 import org.tendiwa.client.gdx.TendiwaGdxClientPlugin
 import org.tendiwa.frontend.generic.move
-import org.tendiwa.plane.grid.constructors.centeredGridRectangle
-import org.tendiwa.plane.grid.dimensions.GridDimension
 import org.tendiwa.plane.grid.masks.contains
 import org.tendiwa.plane.grid.tiles.Tile
 
@@ -43,13 +46,6 @@ class RoguelikePlugin : TendiwaGdxClientPlugin {
                         return false
                     }
                     centerCameraOnTile(targetTile)
-                    vicinity.tileBounds = centeredGridRectangle(
-                        targetTile,
-                        GridDimension(
-                            vicinity.tileBounds.width,
-                            vicinity.tileBounds.height
-                        )
-                    )
                     playerVolition.move(
                         reality,
                         targetTile.x,
@@ -77,7 +73,42 @@ class RoguelikePlugin : TendiwaGdxClientPlugin {
                 registerReaction(
                     PlayerVision.Change::class.java,
                     { stimulus ->
+                        vicinity.tileBounds = stimulus.new.hull
                         vicinity.fieldOfView = stimulus.new.mask
+                        stimulus.old
+                            .difference(stimulus.new)
+                            .let { difference ->
+                                difference.seen.forEach {
+                                    if (reality.space.walls.chunkWithTile(it).wallAt(it) != WallType.void) {
+                                        gridActorRegistry.spawnWall(it)
+                                    }
+                                }
+                                reality.space.realThings
+                                    .viewOfArea(vicinity.tileBounds)
+                                    .things
+                                    .filter {
+                                        val tile = it.position.tile
+                                        difference.seen.any { it == tile }
+                                    }
+                                    .forEach {
+                                        gridActorRegistry.spawnRealThing(it)
+                                    }
+                                difference.unseen.forEach {
+                                    if (reality.space.walls.chunkWithTile(it).wallAt(it) != WallType.void) {
+                                        gridActorRegistry.removeWallActor(it)
+                                    }
+                                }
+                                reality.space.realThings
+                                    .viewOfArea(vicinity.tileBounds)
+                                    .things
+                                    .filter {
+                                        val tile = it.position.tile
+                                        difference.unseen.any { it == tile }
+                                    }
+                                    .forEach {
+                                        gridActorRegistry.removeActor(it.position.tile, it)
+                                    }
+                            }
                     }
                 )
             }
@@ -87,6 +118,7 @@ class RoguelikePlugin : TendiwaGdxClientPlugin {
                 0f
             )
             vicinity.fieldOfView = playerCharacter.playerVision.fieldOfView.mask
+            vicinity.tileBounds = playerCharacter.playerVision.fieldOfView.hull
             keysSetup.apply {
                 addAction(
                     Input.Keys.LEFT,
