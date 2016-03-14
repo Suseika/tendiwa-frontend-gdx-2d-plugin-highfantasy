@@ -14,16 +14,14 @@ class RoguelikePlugin : TendiwaGdxClientPlugin {
     override fun init(game: TendiwaGame) {
         game.apply {
             val playerCharacter = game.reality.hostOf(game.playerVolition)
-            val realThingMoves = RealThingMovementReaction(game)
-            val fieldOfViewGetsRedrawn = PlayerVisionChangeReaction(game)
             frontendStimulusMedium.apply {
                 registerReaction(
                     Position.Change::class.java,
-                    realThingMoves
+                    RealThingMovementReaction(game)
                 )
                 registerReaction(
                     PlayerVision.Change::class.java,
-                    fieldOfViewGetsRedrawn
+                    PlayerVisionChangeReaction(game)
                 )
             }
             vicinity.updateFieldOfView(playerCharacter.playerVision.fieldOfView)
