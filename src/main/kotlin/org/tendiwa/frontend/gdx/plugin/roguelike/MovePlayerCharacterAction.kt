@@ -13,22 +13,20 @@ class MovePlayerCharacterAction(
     private val playerCharacter: RealThing
 ) : (Int, Int) -> Boolean {
     override fun invoke(dx: Int, dy: Int): Boolean {
-        game.apply {
-            if (dx != 0 || dy != 0) {
-                val currentTile = playerCharacter.position.tile
-                val targetTile = currentTile.move(dx, dy)
-                if (!game.reality.space.hull.contains(targetTile)) {
-                    return false
-                }
-                game.camera.centerOnTile(targetTile)
-                playerVolition.move(
-                    reality,
-                    targetTile.x,
-                    targetTile.y
-                )
-                return true
-            }
+        if (dx == 0 && dy == 0) {
+            return false
         }
-        return false
+        val currentTile = playerCharacter.position.tile
+        val targetTile = currentTile.move(dx, dy)
+        if (!game.reality.space.hull.contains(targetTile)) {
+            return false
+        }
+        game.camera.centerOnTile(targetTile)
+        game.playerVolition.move(
+            game.reality,
+            targetTile.x,
+            targetTile.y
+        )
+        return true
     }
 }
