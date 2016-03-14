@@ -13,37 +13,50 @@ internal class PlayerVisionChangeReaction(
 ) : GameReaction<PlayerVision.Change>(game) {
 
     override fun invoke(stimulus: PlayerVision.Change) {
+        game.vicinity.updateFieldOfView(stimulus.new)
+        stimulus.old
+            .difference(stimulus.new)
+            .let { difference ->
+                showSeenWalls(difference)
+                showSeenThings(difference)
+                destroyUnseenWalls(difference)
+                destroyUnseenThings(difference)
+            }
+    }
+
+    private fun showSeenWalls(difference: PlayerVision.VisionDifference) {
+        difference.seen
+            .filter { game.reality.space.walls.hasWallAt(it) }
+            .forEach { game.gridActorRegistry.spawnWall(it) }
+    }
+
+    private fun destroyUnseenWalls(difference: PlayerVision.VisionDifference) {
+        difference.unseen
+            .filter { game.reality.space.walls.hasWallAt(it) }
+            .forEach { game.gridActorRegistry.removeWallActor(it) }
+    }
+
+    private fun showSeenThings(difference: PlayerVision.VisionDifference) {
         game.apply {
-            vicinity.updateFieldOfView(stimulus.new)
-            stimulus.old
-                .difference(stimulus.new)
-                .let { difference ->
-                    gridActorRegistry.apply {
-                        difference.seen
-                            .filter { reality.space.walls.hasWallAt(it) }
-                            .forEach { spawnWall(it) }
-                        reality.space.realThings
-                            .viewOfArea(vicinity.tileBounds)
-                            .things
-                            .filter {
-                                val tile = it.position.tile
-                                difference.seen.any { it == tile }
-                            }
-                            .forEach { spawnRealThing(it) }
-                        difference.unseen
-                            .filter { reality.space.walls.hasWallAt(it) }
-                            .forEach { removeWallActor(it) }
-                        reality.space.realThings
-                            .viewOfArea(vicinity.tileBounds)
-                            .things
-                            .filter {
-                                val tile = it.position.tile
-                                difference.unseen.any { it == tile }
-                            }
-                            .forEach { removeActor(it.position.tile, it) }
-                    }
+            reality.space.realThings
+                .viewOfArea(vicinity.tileBounds)
+                .things
+                .filter {
+                    val tile = it.position.tile
+                    difference.seen.any { it == tile }
                 }
+                .forEach { gridActorRegistry.spawnRealThing(it) }
         }
+    }
+
+    private fun destroyUnseenThings(difference: PlayerVision.VisionDifference) {
+        game.reality.space.realThings
+            .viewOfArea(game.vicinity.tileBounds)
+            .things
+            .filter { thing ->
+                difference.unseen.any { it == thing.position.tile }
+            }
+            .forEach { game.gridActorRegistry.removeActor(it.position.tile, it) }
     }
 
 }
