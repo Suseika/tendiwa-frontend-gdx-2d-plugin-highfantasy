@@ -55,61 +55,66 @@ class RoguelikePlugin : TendiwaGdxClientPlugin {
                 }
                 return false
             }
+
+            val realThingMoves = {
+                stimulus: Position.Change ->
+                gridActorRegistry
+                    .actorOf(stimulus.host)
+                    .addAction(
+                        MoveToAction().apply {
+                            x = stimulus.to.x.toFloat()
+                            y = stimulus.to.y.toFloat()
+                            duration = 0.1f
+                        }
+                    )
+            }
+            val fieldOfViewGetsRedrawn = {
+                stimulus: PlayerVision.Change ->
+                vicinity.tileBounds = stimulus.new.hull
+                vicinity.fieldOfView = stimulus.new.mask
+                stimulus.old
+                    .difference(stimulus.new)
+                    .let { difference ->
+                        difference.seen.forEach {
+                            if (reality.space.walls.chunkWithTile(it).wallAt(it) != WallType.void) {
+                                gridActorRegistry.spawnWall(it)
+                            }
+                        }
+                        reality.space.realThings
+                            .viewOfArea(vicinity.tileBounds)
+                            .things
+                            .filter {
+                                val tile = it.position.tile
+                                difference.seen.any { it == tile }
+                            }
+                            .forEach {
+                                gridActorRegistry.spawnRealThing(it)
+                            }
+                        difference.unseen.forEach {
+                            if (reality.space.walls.chunkWithTile(it).wallAt(it) != WallType.void) {
+                                gridActorRegistry.removeWallActor(it)
+                            }
+                        }
+                        reality.space.realThings
+                            .viewOfArea(vicinity.tileBounds)
+                            .things
+                            .filter {
+                                val tile = it.position.tile
+                                difference.unseen.any { it == tile }
+                            }
+                            .forEach {
+                                gridActorRegistry.removeActor(it.position.tile, it)
+                            }
+                    }
+            }
             frontendStimulusMedium.apply {
                 registerReaction(
                     Position.Change::class.java,
-                    { stimulus ->
-                        gridActorRegistry
-                            .actorOf(stimulus.host)
-                            .addAction(
-                                MoveToAction().apply {
-                                    x = stimulus.to.x.toFloat()
-                                    y = stimulus.to.y.toFloat()
-                                    duration = 0.1f
-                                }
-                            )
-                    }
+                    realThingMoves
                 )
                 registerReaction(
                     PlayerVision.Change::class.java,
-                    { stimulus ->
-                        vicinity.tileBounds = stimulus.new.hull
-                        vicinity.fieldOfView = stimulus.new.mask
-                        stimulus.old
-                            .difference(stimulus.new)
-                            .let { difference ->
-                                difference.seen.forEach {
-                                    if (reality.space.walls.chunkWithTile(it).wallAt(it) != WallType.void) {
-                                        gridActorRegistry.spawnWall(it)
-                                    }
-                                }
-                                reality.space.realThings
-                                    .viewOfArea(vicinity.tileBounds)
-                                    .things
-                                    .filter {
-                                        val tile = it.position.tile
-                                        difference.seen.any { it == tile }
-                                    }
-                                    .forEach {
-                                        gridActorRegistry.spawnRealThing(it)
-                                    }
-                                difference.unseen.forEach {
-                                    if (reality.space.walls.chunkWithTile(it).wallAt(it) != WallType.void) {
-                                        gridActorRegistry.removeWallActor(it)
-                                    }
-                                }
-                                reality.space.realThings
-                                    .viewOfArea(vicinity.tileBounds)
-                                    .things
-                                    .filter {
-                                        val tile = it.position.tile
-                                        difference.unseen.any { it == tile }
-                                    }
-                                    .forEach {
-                                        gridActorRegistry.removeActor(it.position.tile, it)
-                                    }
-                            }
-                    }
+                    fieldOfViewGetsRedrawn
                 )
             }
             camera.position.set(
