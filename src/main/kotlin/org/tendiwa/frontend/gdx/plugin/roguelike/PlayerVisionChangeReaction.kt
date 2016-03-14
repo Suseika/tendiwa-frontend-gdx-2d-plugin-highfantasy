@@ -12,7 +12,7 @@ internal class PlayerVisionChangeReaction(
     game: TendiwaGame
 ) : GameReaction<PlayerVision.Change>(game) {
 
-    override fun invoke(stimulus: PlayerVision.Change) {
+    override fun invoke(stimulus: PlayerVision.Change, done: () -> Unit) {
         game.vicinity.updateFieldOfView(stimulus.new)
         stimulus.old
             .difference(stimulus.new)
@@ -22,6 +22,7 @@ internal class PlayerVisionChangeReaction(
                 destroyUnseenWalls(difference)
                 destroyUnseenThings(difference)
             }
+        done()
     }
 
     private fun showSeenWalls(difference: PlayerVision.VisionDifference) {

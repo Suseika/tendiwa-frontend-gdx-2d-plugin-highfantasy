@@ -5,4 +5,4 @@ import org.tendiwa.client.gdx.TendiwaGame
 
 abstract class GameReaction<S : Stimulus>(
     protected val game: TendiwaGame
-): (S) ->Unit
+) : (S, () -> Unit) -> Unit
