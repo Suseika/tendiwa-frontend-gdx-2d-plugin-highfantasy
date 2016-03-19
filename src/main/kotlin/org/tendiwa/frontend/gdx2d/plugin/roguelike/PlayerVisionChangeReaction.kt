@@ -1,4 +1,4 @@
-package org.tendiwa.frontend.gdx.plugin.roguelike
+package org.tendiwa.frontend.gdx2d.plugin.roguelike
 
 import org.tendiwa.backend.modules.roguelike.aspects.PlayerVision
 import org.tendiwa.backend.space.aspects.position
@@ -6,7 +6,7 @@ import org.tendiwa.backend.space.realThing.realThings
 import org.tendiwa.backend.space.realThing.viewOfArea
 import org.tendiwa.backend.space.walls.hasWallAt
 import org.tendiwa.backend.space.walls.walls
-import org.tendiwa.client.gdx.TendiwaGame
+import org.tendiwa.frontend.gdx2d.TendiwaGame
 
 internal class PlayerVisionChangeReaction(
     game: TendiwaGame

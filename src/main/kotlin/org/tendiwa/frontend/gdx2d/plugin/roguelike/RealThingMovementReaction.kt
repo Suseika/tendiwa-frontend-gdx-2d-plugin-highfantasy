@@ -1,9 +1,9 @@
-package org.tendiwa.frontend.gdx.plugin.roguelike
+package org.tendiwa.frontend.gdx2d.plugin.roguelike
 
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.badlogic.gdx.scenes.scene2d.actions.MoveToAction
 import org.tendiwa.backend.space.aspects.Position
-import org.tendiwa.client.gdx.TendiwaGame
+import org.tendiwa.frontend.gdx2d.TendiwaGame
 
 class RealThingMovementReaction(
     game: TendiwaGame

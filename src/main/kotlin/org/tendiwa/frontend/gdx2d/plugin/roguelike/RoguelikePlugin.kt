@@ -1,14 +1,14 @@
-package org.tendiwa.frontend.gdx.plugin.roguelike
+package org.tendiwa.frontend.gdx2d.plugin.roguelike
 
 import com.badlogic.gdx.Input
 import org.tendiwa.backend.modules.roguelike.aspects.PlayerVision
 import org.tendiwa.backend.modules.roguelike.aspects.playerVision
 import org.tendiwa.backend.space.aspects.Position
 import org.tendiwa.backend.space.aspects.position
-import org.tendiwa.client.gdx.TendiwaGame
-import org.tendiwa.client.gdx.TendiwaGdxClientPlugin
-import org.tendiwa.client.gdx.centerOnTile
-import org.tendiwa.client.gdx.gridActors.addActorFactories
+import org.tendiwa.frontend.gdx2d.TendiwaGame
+import org.tendiwa.frontend.gdx2d.TendiwaGdxClientPlugin
+import org.tendiwa.frontend.gdx2d.centerOnTile
+import org.tendiwa.frontend.gdx2d.gridActors.addActorFactories
 import org.tendiwa.frontend.generic.RenderingVicinity
 
 class RoguelikePlugin : TendiwaGdxClientPlugin {

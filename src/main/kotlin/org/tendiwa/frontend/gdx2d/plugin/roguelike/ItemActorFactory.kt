@@ -1,12 +1,12 @@
-package org.tendiwa.frontend.gdx.plugin.roguelike
+package org.tendiwa.frontend.gdx2d.plugin.roguelike
 
 import com.badlogic.gdx.scenes.scene2d.Actor
 import org.tendiwa.backend.existence.RealThing
 import org.tendiwa.backend.modules.roguelike.archetypes.Item
 import org.tendiwa.backend.space.aspects.name
-import org.tendiwa.client.gdx.gridActors.ActorFactory
-import org.tendiwa.client.gdx.resources.images.NamedTextureCache
-import org.tendiwa.client.gdx.walls.RegionActor
+import org.tendiwa.frontend.gdx2d.gridActors.ActorFactory
+import org.tendiwa.frontend.gdx2d.resources.images.NamedTextureCache
+import org.tendiwa.frontend.gdx2d.walls.RegionActor
 
 class ItemActorFactory(
     private val textureCache: NamedTextureCache

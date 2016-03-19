@@ -1,9 +1,9 @@
-package org.tendiwa.frontend.gdx.plugin.roguelike
+package org.tendiwa.frontend.gdx2d.plugin.roguelike
 
 import org.tendiwa.backend.existence.RealThing
 import org.tendiwa.backend.space.aspects.position
-import org.tendiwa.client.gdx.TendiwaGame
-import org.tendiwa.client.gdx.centerOnTile
+import org.tendiwa.frontend.gdx2d.TendiwaGame
+import org.tendiwa.frontend.gdx2d.centerOnTile
 import org.tendiwa.frontend.generic.move
 import org.tendiwa.plane.grid.masks.contains
 import org.tendiwa.plane.grid.tiles.move
