@@ -14,6 +14,9 @@ class RoguelikePlugin : TendiwaGdxClientPlugin {
     override fun init(game: TendiwaGame) {
         game.apply {
             val playerCharacter = game.reality.hostOf(game.playerVolition)
+            gridActorRegistry.addActorFactory(
+                CharacterActorFactory(textureCache)
+            )
             frontendStimulusMedium.apply {
                 registerReaction(
                     Position.Change::class.java,
