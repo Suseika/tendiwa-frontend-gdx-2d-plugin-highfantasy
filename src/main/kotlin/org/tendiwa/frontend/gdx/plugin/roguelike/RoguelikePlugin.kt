@@ -8,14 +8,16 @@ import org.tendiwa.backend.space.aspects.position
 import org.tendiwa.client.gdx.TendiwaGame
 import org.tendiwa.client.gdx.TendiwaGdxClientPlugin
 import org.tendiwa.client.gdx.centerOnTile
+import org.tendiwa.client.gdx.gridActors.addActorFactories
 import org.tendiwa.frontend.generic.RenderingVicinity
 
 class RoguelikePlugin : TendiwaGdxClientPlugin {
     override fun init(game: TendiwaGame) {
         game.apply {
             val playerCharacter = game.reality.hostOf(game.playerVolition)
-            gridActorRegistry.addActorFactory(
-                CharacterActorFactory(textureCache)
+            gridActorRegistry.addActorFactories(
+                CharacterActorFactory(textureCache),
+                ItemActorFactory(textureCache)
             )
             frontendStimulusMedium.apply {
                 registerReaction(
