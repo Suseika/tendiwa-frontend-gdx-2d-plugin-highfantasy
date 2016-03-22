@@ -23,7 +23,6 @@ class MovePlayerCharacterAction(
         }
         game.camera.centerOnTile(targetTile)
         game.playerVolition.move(
-            game.reality,
             targetTile.x,
             targetTile.y
         )
