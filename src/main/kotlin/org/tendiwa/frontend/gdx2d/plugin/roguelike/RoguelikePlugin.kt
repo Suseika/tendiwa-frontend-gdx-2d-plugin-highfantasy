@@ -14,7 +14,7 @@ import org.tendiwa.frontend.generic.RenderingVicinity
 class RoguelikePlugin : TendiwaGdxClientPlugin {
     override fun init(game: TendiwaGame) {
         game.apply {
-            val playerCharacter = game.reality.hostOf(game.playerVolition)
+            val playerCharacter = game.playerVolition.host
             gridActorRegistry.addActorFactories(
                 CharacterActorFactory(textureCache),
                 ItemActorFactory(textureCache)
@@ -41,6 +41,7 @@ class RoguelikePlugin : TendiwaGdxClientPlugin {
                         addAction(Input.Keys.DOWN, { move(0, -1) })
                     }
             }
+            setupUi(game, textureCache)
         }
     }
 
