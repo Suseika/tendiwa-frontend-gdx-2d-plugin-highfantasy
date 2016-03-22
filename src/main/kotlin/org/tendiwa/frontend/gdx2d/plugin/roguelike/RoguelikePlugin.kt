@@ -5,6 +5,7 @@ import org.tendiwa.backend.modules.roguelike.aspects.PlayerVision
 import org.tendiwa.backend.modules.roguelike.aspects.playerVision
 import org.tendiwa.backend.space.aspects.Position
 import org.tendiwa.backend.space.aspects.position
+import org.tendiwa.backend.space.stimuli.RemovalFromSpace
 import org.tendiwa.frontend.gdx2d.TendiwaGame
 import org.tendiwa.frontend.gdx2d.TendiwaGdxClientPlugin
 import org.tendiwa.frontend.gdx2d.centerOnTile
@@ -28,6 +29,10 @@ class RoguelikePlugin : TendiwaGdxClientPlugin {
                     PlayerVision.Change::class.java,
                     PlayerVisionChangeReaction(game)
                 )
+                registerReaction(
+                    RemovalFromSpace::class.java,
+                    RealThingRemovalFromSpaceReaction(game)
+                )
             }
             vicinity.updateFieldOfView(playerCharacter.playerVision.fieldOfView)
             camera.centerOnTile(playerCharacter.position.tile)
@@ -39,6 +44,10 @@ class RoguelikePlugin : TendiwaGdxClientPlugin {
                         addAction(Input.Keys.RIGHT, { move(1, 0) })
                         addAction(Input.Keys.UP, { move(0, 1) })
                         addAction(Input.Keys.DOWN, { move(0, -1) })
+                    }
+                PickUpAction(game, playerCharacter)
+                    .let { pickUp ->
+                        addAction(Input.Keys.G, { pickUp(0, 0) })
                     }
             }
             setupUi(game, textureCache)
