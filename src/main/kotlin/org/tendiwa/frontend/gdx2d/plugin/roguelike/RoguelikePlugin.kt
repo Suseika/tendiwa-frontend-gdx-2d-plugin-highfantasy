@@ -10,6 +10,12 @@ import org.tendiwa.frontend.gdx2d.TendiwaGame
 import org.tendiwa.frontend.gdx2d.TendiwaGdxClientPlugin
 import org.tendiwa.frontend.gdx2d.centerOnTile
 import org.tendiwa.frontend.gdx2d.gridActors.addActorFactories
+import org.tendiwa.frontend.gdx2d.plugin.roguelike.actions.MovePlayerCharacterAction
+import org.tendiwa.frontend.gdx2d.plugin.roguelike.actions.PickUpAction
+import org.tendiwa.frontend.gdx2d.plugin.roguelike.reactions.PlayerVisionChangeReaction
+import org.tendiwa.frontend.gdx2d.plugin.roguelike.reactions.RealThingMovementReaction
+import org.tendiwa.frontend.gdx2d.plugin.roguelike.reactions.RealThingRemovalFromSpaceReaction
+import org.tendiwa.frontend.gdx2d.plugin.roguelike.ui.setupUi
 import org.tendiwa.frontend.generic.RenderingVicinity
 
 class RoguelikePlugin : TendiwaGdxClientPlugin {

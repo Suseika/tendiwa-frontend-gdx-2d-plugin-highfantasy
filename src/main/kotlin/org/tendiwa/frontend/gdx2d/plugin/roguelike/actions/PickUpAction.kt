@@ -1,4 +1,4 @@
-package org.tendiwa.frontend.gdx2d.plugin.roguelike
+package org.tendiwa.frontend.gdx2d.plugin.roguelike.actions
 
 import org.tendiwa.backend.existence.RealThing
 import org.tendiwa.backend.modules.roguelike.archetypes.Item

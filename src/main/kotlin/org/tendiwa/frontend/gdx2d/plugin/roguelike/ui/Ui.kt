@@ -1,9 +1,8 @@
-package org.tendiwa.frontend.gdx2d.plugin.roguelike
+package org.tendiwa.frontend.gdx2d.plugin.roguelike.ui
 
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import org.tendiwa.backend.modules.roguelike.aspects.inventory
 import org.tendiwa.frontend.gdx2d.TendiwaGame
-import org.tendiwa.frontend.gdx2d.plugin.roguelike.ui.InventoryWidget
 import org.tendiwa.frontend.gdx2d.resources.images.NamedTextureCache
 
 fun setupUi(game: TendiwaGame, textureCache: NamedTextureCache) {
