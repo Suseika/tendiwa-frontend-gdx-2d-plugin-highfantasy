@@ -13,7 +13,7 @@ fun setupUi(game: TendiwaGame, textureCache: NamedTextureCache) {
                 bottom().right()
                 val inventory = InventoryWidget(
                     game.playerVolition.host.inventory,
-                    textureCache
+                    game
                 )
                 add(inventory).height(200f).width(200f).top().center()
                     .pad(20f)
