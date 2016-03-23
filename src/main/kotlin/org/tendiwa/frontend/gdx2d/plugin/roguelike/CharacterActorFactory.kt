@@ -2,8 +2,9 @@ package org.tendiwa.frontend.gdx2d.plugin.roguelike
 
 import com.badlogic.gdx.scenes.scene2d.Actor
 import org.tendiwa.backend.existence.RealThing
+import org.tendiwa.backend.existence.aspect
 import org.tendiwa.backend.modules.roguelike.archetypes.Character
-import org.tendiwa.backend.space.aspects.name
+import org.tendiwa.backend.space.aspects.Name
 import org.tendiwa.frontend.gdx2d.gridActors.ActorFactory
 import org.tendiwa.frontend.gdx2d.resources.images.NamedTextureCache
 import org.tendiwa.frontend.gdx2d.walls.RegionActor
@@ -16,6 +17,6 @@ class CharacterActorFactory(
 
     override fun create(realThing: RealThing): Actor =
         RegionActor(
-            cache.texture("characters/" + realThing.name.string, 0)
+            cache.texture("characters/" + realThing.aspect<Name>().string, 0)
         )
 }

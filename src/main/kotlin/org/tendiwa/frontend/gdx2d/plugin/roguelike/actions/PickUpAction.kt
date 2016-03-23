@@ -1,9 +1,10 @@
 package org.tendiwa.frontend.gdx2d.plugin.roguelike.actions
 
 import org.tendiwa.backend.existence.RealThing
+import org.tendiwa.backend.existence.aspect
 import org.tendiwa.backend.modules.roguelike.archetypes.Item
 import org.tendiwa.backend.modules.roguelike.playerVolition.pickUp
-import org.tendiwa.backend.space.aspects.position
+import org.tendiwa.backend.space.aspects.Position
 import org.tendiwa.backend.space.chunks.chunkWithTile
 import org.tendiwa.backend.space.realThing.realThings
 import org.tendiwa.frontend.gdx2d.TendiwaGame
@@ -18,11 +19,11 @@ class PickUpAction(
     private val playerCharacter: RealThing
 ) : (Int, Int) -> Unit {
     override fun invoke(dx: Int, dy: Int) {
-        val pickUpTile = playerCharacter.position.tile.move(dx, dy)
+        val pickUpTile = playerCharacter.aspect<Position>().tile.move(dx, dy)
         val item = game.reality.space.realThings
             .chunkWithTile(pickUpTile)
             .things
-            .filter { it.position.tile == pickUpTile && it is Item }
+            .filter { it.aspect<Position>().tile == pickUpTile && it is Item }
             .firstOrNull() as Item?
         if (item != null) {
             game.playerVolition.pickUp(item)

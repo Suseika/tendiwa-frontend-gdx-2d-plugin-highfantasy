@@ -1,10 +1,9 @@
 package org.tendiwa.frontend.gdx2d.plugin.roguelike
 
 import com.badlogic.gdx.Input
+import org.tendiwa.backend.existence.aspect
 import org.tendiwa.backend.modules.roguelike.aspects.PlayerVision
-import org.tendiwa.backend.modules.roguelike.aspects.playerVision
 import org.tendiwa.backend.space.aspects.Position
-import org.tendiwa.backend.space.aspects.position
 import org.tendiwa.backend.space.stimuli.PlacementToSpace
 import org.tendiwa.backend.space.stimuli.RemovalFromSpace
 import org.tendiwa.frontend.gdx2d.GameReaction
@@ -47,8 +46,12 @@ class RoguelikePlugin : TendiwaGdxClientPlugin {
                     RealThingPlacementToSpaceReaction(game)
                 )
             }
-            vicinity.updateFieldOfView(playerCharacter.playerVision.fieldOfView)
-            camera.centerOnTile(playerCharacter.position.tile)
+            vicinity.updateFieldOfView(
+                playerCharacter
+                    .aspect<PlayerVision>()
+                    .fieldOfView
+            )
+            camera.centerOnTile(playerCharacter.aspect<Position>().tile)
             keysSetup.apply {
                 MovePlayerCharacterAction(game, playerCharacter)
                     .let {

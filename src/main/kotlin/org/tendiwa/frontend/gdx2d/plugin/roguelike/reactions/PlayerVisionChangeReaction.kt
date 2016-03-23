@@ -1,13 +1,14 @@
 package org.tendiwa.frontend.gdx2d.plugin.roguelike.reactions
 
+import org.tendiwa.backend.existence.aspect
 import org.tendiwa.backend.modules.roguelike.aspects.PlayerVision
-import org.tendiwa.backend.space.aspects.position
+import org.tendiwa.backend.space.aspects.Position
 import org.tendiwa.backend.space.realThing.realThings
 import org.tendiwa.backend.space.realThing.viewOfArea
 import org.tendiwa.backend.space.walls.hasWallAt
 import org.tendiwa.backend.space.walls.walls
-import org.tendiwa.frontend.gdx2d.TendiwaGame
 import org.tendiwa.frontend.gdx2d.GameReaction
+import org.tendiwa.frontend.gdx2d.TendiwaGame
 import org.tendiwa.frontend.gdx2d.plugin.roguelike.updateFieldOfView
 
 internal class PlayerVisionChangeReaction(
@@ -45,7 +46,7 @@ internal class PlayerVisionChangeReaction(
                 .viewOfArea(vicinity.tileBounds)
                 .things
                 .filter {
-                    val tile = it.position.tile
+                    val tile = it.aspect<Position>().tile
                     difference.seen.any { it == tile }
                 }
                 .forEach { gridActorRegistry.spawnRealThing(it) }
@@ -57,9 +58,9 @@ internal class PlayerVisionChangeReaction(
             .viewOfArea(game.vicinity.tileBounds)
             .things
             .filter { thing ->
-                difference.unseen.any { it == thing.position.tile }
+                difference.unseen.any { it == thing.aspect<Position>().tile }
             }
-            .forEach { game.gridActorRegistry.removeActor(it.position.tile, it) }
+            .forEach { game.gridActorRegistry.removeActor(it.aspect<Position>().tile, it) }
     }
 
 }

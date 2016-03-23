@@ -1,7 +1,8 @@
 package org.tendiwa.frontend.gdx2d.plugin.roguelike.actions
 
 import org.tendiwa.backend.existence.RealThing
-import org.tendiwa.backend.space.aspects.position
+import org.tendiwa.backend.existence.aspect
+import org.tendiwa.backend.space.aspects.Position
 import org.tendiwa.frontend.gdx2d.TendiwaGame
 import org.tendiwa.frontend.gdx2d.centerOnTile
 import org.tendiwa.frontend.generic.move
@@ -16,7 +17,7 @@ class MovePlayerCharacterAction(
         if (dx == 0 && dy == 0) {
             return false
         }
-        val currentTile = playerCharacter.position.tile
+        val currentTile = playerCharacter.aspect<Position>().tile
         val targetTile = currentTile.move(dx, dy)
         if (!game.reality.space.hull.contains(targetTile)) {
             return false

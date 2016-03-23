@@ -4,9 +4,10 @@ import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.Widget
+import org.tendiwa.backend.existence.aspect
 import org.tendiwa.backend.modules.roguelike.archetypes.Item
 import org.tendiwa.backend.modules.roguelike.aspects.Inventory
-import org.tendiwa.backend.space.aspects.name
+import org.tendiwa.backend.space.aspects.Name
 import org.tendiwa.frontend.gdx2d.GameReaction
 import org.tendiwa.frontend.gdx2d.TendiwaGame
 import org.tendiwa.frontend.gdx2d.ui.VerticalFlowGroup
@@ -63,6 +64,6 @@ class InventoryWidget(
     }
 
     private fun ItemWidget(it: Item): Widget =
-        Image(game.textureCache.texture("items/${it.name.string}", 0))
+        Image(game.textureCache.texture("items/${it.aspect<Name>().string}", 0))
 }
 
