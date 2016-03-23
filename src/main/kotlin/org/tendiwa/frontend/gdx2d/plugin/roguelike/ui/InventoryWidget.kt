@@ -9,27 +9,38 @@ import org.tendiwa.backend.modules.roguelike.aspects.Inventory
 import org.tendiwa.backend.space.aspects.name
 import org.tendiwa.frontend.gdx2d.GameReaction
 import org.tendiwa.frontend.gdx2d.TendiwaGame
+import org.tendiwa.frontend.gdx2d.ui.VerticalFlowGroup
 import org.tendiwa.frontend.gdx2d.ui.setBackgroundColor
+import java.util.*
 
 class InventoryWidget(
     private val inventory: Inventory,
     private val game: TendiwaGame
 ) : Table() {
+
+    private val itemsToWidgets: MutableMap<Item, Widget> =
+        LinkedHashMap()
+    private val flowGroup: VerticalFlowGroup = VerticalFlowGroup()
+
     init {
         setBackgroundColor(Color(0.2f, 0.2f, 0.2f, 1.0f))
-        setSize(400f, 300f)
         inventory.items
             .forEach { addItemIcon(it) }
         game.frontendStimulusMedium.registerReaction(
             Inventory.Store::class.java,
             StoreReaction()
         )
+        game.frontendStimulusMedium.registerReaction(
+            Inventory.Lose::class.java,
+            LoseReaction()
+        )
+        add(flowGroup).expandX().expandY().fillX().fillY()
     }
 
-    private fun addItemIcon(it: Item) {
-        add(ItemWidget(it))
-            .minWidth(32f)
-            .minHeight(32f)
+    private fun addItemIcon(item: Item) {
+        val widget = ItemWidget(item)
+        flowGroup.addActor(widget)
+        itemsToWidgets[item] = widget
     }
 
     inner class StoreReaction : GameReaction<Inventory.Store>(game) {
@@ -37,7 +48,18 @@ class InventoryWidget(
             addItemIcon(stimulus.item)
             done()
         }
+    }
 
+    inner class LoseReaction : GameReaction<Inventory.Lose>(game) {
+        override fun invoke(stimulus: Inventory.Lose, done: () -> Unit) {
+            removeItemIcon(stimulus.item)
+            done()
+        }
+    }
+
+    private fun removeItemIcon(item: Item) {
+        flowGroup.removeActor(itemsToWidgets[item])
+        itemsToWidgets.remove(item)
     }
 
     private fun ItemWidget(it: Item): Widget =

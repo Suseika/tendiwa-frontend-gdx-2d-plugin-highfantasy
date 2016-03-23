@@ -19,12 +19,12 @@ class PickUpAction(
 ) : (Int, Int) -> Unit {
     override fun invoke(dx: Int, dy: Int) {
         val pickUpTile = playerCharacter.position.tile.move(dx, dy)
-        val thingsToPickUp = game.reality.space.realThings
+        val item = game.reality.space.realThings
             .chunkWithTile(pickUpTile)
             .things
             .filter { it.position.tile == pickUpTile && it is Item }
-        if (thingsToPickUp.size == 1) {
-            val item = thingsToPickUp.single() as Item
+            .firstOrNull() as Item?
+        if (item != null) {
             game.playerVolition.pickUp(item)
         }
     }

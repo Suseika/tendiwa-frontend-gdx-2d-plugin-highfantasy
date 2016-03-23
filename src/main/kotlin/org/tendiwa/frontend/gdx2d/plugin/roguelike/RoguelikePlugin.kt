@@ -5,11 +5,14 @@ import org.tendiwa.backend.modules.roguelike.aspects.PlayerVision
 import org.tendiwa.backend.modules.roguelike.aspects.playerVision
 import org.tendiwa.backend.space.aspects.Position
 import org.tendiwa.backend.space.aspects.position
+import org.tendiwa.backend.space.stimuli.PlacementToSpace
 import org.tendiwa.backend.space.stimuli.RemovalFromSpace
+import org.tendiwa.frontend.gdx2d.GameReaction
 import org.tendiwa.frontend.gdx2d.TendiwaGame
 import org.tendiwa.frontend.gdx2d.TendiwaGdxClientPlugin
 import org.tendiwa.frontend.gdx2d.centerOnTile
 import org.tendiwa.frontend.gdx2d.gridActors.addActorFactories
+import org.tendiwa.frontend.gdx2d.plugin.roguelike.actions.DropFirstItemInInventoryAction
 import org.tendiwa.frontend.gdx2d.plugin.roguelike.actions.MovePlayerCharacterAction
 import org.tendiwa.frontend.gdx2d.plugin.roguelike.actions.PickUpAction
 import org.tendiwa.frontend.gdx2d.plugin.roguelike.reactions.PlayerVisionChangeReaction
@@ -39,6 +42,10 @@ class RoguelikePlugin : TendiwaGdxClientPlugin {
                     RemovalFromSpace::class.java,
                     RealThingRemovalFromSpaceReaction(game)
                 )
+                registerReaction(
+                    PlacementToSpace::class.java,
+                    RealThingPlacementToSpaceReaction(game)
+                )
             }
             vicinity.updateFieldOfView(playerCharacter.playerVision.fieldOfView)
             camera.centerOnTile(playerCharacter.position.tile)
@@ -55,11 +62,24 @@ class RoguelikePlugin : TendiwaGdxClientPlugin {
                     .let { pickUp ->
                         addAction(Input.Keys.G, { pickUp(0, 0) })
                     }
+                DropFirstItemInInventoryAction(game)
+                    .let { drop ->
+                        addAction(Input.Keys.D, { drop() })
+                    }
             }
             setupUi(game, textureCache)
         }
     }
 
+}
+
+class RealThingPlacementToSpaceReaction(
+    game: TendiwaGame
+) : GameReaction<PlacementToSpace>(game) {
+    override fun invoke(stimulus: PlacementToSpace, done: () -> Unit) {
+        game.gridActorRegistry.spawnRealThing(stimulus.thing)
+        done()
+    }
 }
 
 fun RenderingVicinity.updateFieldOfView(fieldOfView: PlayerVision.FieldOfView) {
