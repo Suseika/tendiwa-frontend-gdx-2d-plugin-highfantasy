@@ -19,5 +19,10 @@ fun setupUi(game: TendiwaGame, textureCache: NamedTextureCache) {
                     .pad(20f)
             }
         )
+        uiStage.addActor(
+            FpsCounter().apply {
+                setPosition(40f, 20f)
+            }
+        )
     }
 }
