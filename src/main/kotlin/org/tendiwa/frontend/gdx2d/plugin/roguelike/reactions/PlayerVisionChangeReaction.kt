@@ -14,15 +14,13 @@ internal class PlayerVisionChangeReaction(
 ) : GameReaction<PlayerVision.Change>(game) {
 
     override fun invoke(stimulus: PlayerVision.Change, done: () -> Unit) {
-        game.vicinity.updateFieldOfView(stimulus.new)
-        stimulus.old
+        val difference = stimulus.old
             .difference(stimulus.new)
-            .let { difference ->
-                showSeenWalls(difference)
-                showSeenThings(difference)
-                destroyUnseenWalls(difference)
-                destroyUnseenThings(difference)
-            }
+        destroyUnseenWalls(difference)
+        destroyUnseenThings(difference)
+        game.vicinity.updateFieldOfView(stimulus.new)
+        showSeenWalls(difference)
+        showSeenThings(difference)
         done()
     }
 

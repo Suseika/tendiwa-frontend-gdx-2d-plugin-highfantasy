@@ -91,5 +91,6 @@ class RealThingPlacementToSpaceReaction(
 fun RenderingVicinity.updateFieldOfView(fieldOfView: PlayerVision.FieldOfView) {
     this.fieldOfView = fieldOfView.mask
     this.tileBounds = fieldOfView.hull
+    this.boundsDepth = fieldOfView.z
 }
 
