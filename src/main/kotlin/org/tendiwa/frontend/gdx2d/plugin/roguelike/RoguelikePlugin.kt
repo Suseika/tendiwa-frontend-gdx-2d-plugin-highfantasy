@@ -56,10 +56,13 @@ class RoguelikePlugin : TendiwaGdxClientPlugin {
                 MovePlayerCharacterAction(game, playerCharacter)
                     .let {
                         move ->
-                        addAction(Input.Keys.LEFT, { move(-1, 0) })
-                        addAction(Input.Keys.RIGHT, { move(1, 0) })
-                        addAction(Input.Keys.UP, { move(0, 1) })
-                        addAction(Input.Keys.DOWN, { move(0, -1) })
+                        addAction(Input.Keys.LEFT, { move(-1, 0, 0) })
+                        addAction(Input.Keys.RIGHT, { move(1, 0, 0) })
+                        addAction(Input.Keys.UP, { move(0, 1, 0) })
+                        addAction(Input.Keys.DOWN, { move(0, -1, 0) })
+                        addAction(Input.Keys.DOWN, { move(0, -1, 0) })
+                        addAction(Input.Keys.COMMA, { move(0, 0, 1) })
+                        addAction(Input.Keys.PERIOD, { move(0, 0, -1) })
                     }
                 PickUpAction(game, playerCharacter)
                     .let { pickUp ->
