@@ -15,7 +15,7 @@ class MovePlayerCharacterAction(
     private val playerCharacter: RealThing
 ) : (Int, Int, Int) -> Boolean {
     override fun invoke(dx: Int, dy: Int, dz: Int): Boolean {
-        if (dx == 0 && dy == 0) {
+        if (dx == 0 && dy == 0 && dz == 0) {
             return false
         }
         val currentVoxel = playerCharacter.aspect<Position>().voxel
