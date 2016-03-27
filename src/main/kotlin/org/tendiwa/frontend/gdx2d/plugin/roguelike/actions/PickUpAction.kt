@@ -1,12 +1,12 @@
 package org.tendiwa.frontend.gdx2d.plugin.roguelike.actions
 
-import org.tendiwa.backend.existence.RealThing
 import org.tendiwa.backend.existence.aspect
 import org.tendiwa.backend.modules.roguelike.archetypes.Item
 import org.tendiwa.backend.modules.roguelike.playerVolition.pickUp
 import org.tendiwa.backend.space.aspects.Position
 import org.tendiwa.backend.space.chunks.chunkWithTile
 import org.tendiwa.frontend.gdx2d.TendiwaGame
+import org.tendiwa.frontend.gdx2d.input.UiAction
 import org.tendiwa.plane.grid.tiles.move
 
 /**
@@ -14,11 +14,21 @@ import org.tendiwa.plane.grid.tiles.move
  * the player is currently at.
  */
 class PickUpAction(
-    private val game: TendiwaGame,
-    private val playerCharacter: RealThing
-) : (Int, Int) -> Unit {
-    override fun invoke(dx: Int, dy: Int) {
-        val pickUpTile = playerCharacter.aspect<Position>().tile.move(dx, dy)
+    private val game: TendiwaGame
+) : UiAction {
+    override val localizationId: String =
+        "org.tendiwa.roguelike.actions.pickUp"
+
+    private val playerCharacter = game.playerVolition.host
+
+    override fun invoke() {
+        val dx = 0
+        val dy = 0
+        val pickUpTile =
+            playerCharacter
+                .aspect<Position>()
+                .tile
+                .move(dx, dy)
         val item = game.reality.space.realThings
             .planeAtZ(playerCharacter.aspect<Position>().voxel.z)
             .chunkWithTile(pickUpTile)

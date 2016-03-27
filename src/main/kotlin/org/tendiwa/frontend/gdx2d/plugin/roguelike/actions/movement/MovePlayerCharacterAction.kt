@@ -1,4 +1,4 @@
-package org.tendiwa.frontend.gdx2d.plugin.roguelike.actions
+package org.tendiwa.frontend.gdx2d.plugin.roguelike.actions.movement
 
 import org.tendiwa.backend.contains
 import org.tendiwa.backend.existence.RealThing
@@ -10,11 +10,12 @@ import org.tendiwa.frontend.gdx2d.TendiwaGame
 import org.tendiwa.frontend.gdx2d.centerOnTile
 import org.tendiwa.frontend.generic.move
 
-class MovePlayerCharacterAction(
-    private val game: TendiwaGame,
-    private val playerCharacter: RealThing
-) : (Int, Int, Int) -> Boolean {
-    override fun invoke(dx: Int, dy: Int, dz: Int): Boolean {
+abstract class MovePlayerCharacterAction(
+    protected val game: TendiwaGame
+) {
+    private val playerCharacter: RealThing = game.playerVolition.host
+
+    fun move(dx: Int, dy: Int, dz: Int): Boolean {
         if (dx == 0 && dy == 0 && dz == 0) {
             return false
         }

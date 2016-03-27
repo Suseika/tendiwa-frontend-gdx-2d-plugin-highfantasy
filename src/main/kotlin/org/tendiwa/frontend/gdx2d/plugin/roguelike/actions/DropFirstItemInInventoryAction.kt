@@ -5,10 +5,13 @@ import org.tendiwa.backend.modules.roguelike.aspects.Inventory
 import org.tendiwa.backend.modules.roguelike.playerVolition.drop
 import org.tendiwa.backend.space.aspects.Position
 import org.tendiwa.frontend.gdx2d.TendiwaGame
+import org.tendiwa.frontend.gdx2d.input.UiAction
 
 class DropFirstItemInInventoryAction(
     private val game: TendiwaGame
-) : () -> Unit {
+) : UiAction {
+    override val localizationId: String = "org.tendiwa.unnamed"
+
     override fun invoke() {
         val playerCharacter = game.playerVolition.host
         val item = playerCharacter.aspect<Inventory>().items.firstOrNull()
