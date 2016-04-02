@@ -13,7 +13,7 @@ class RealThingMovementReaction(
     override fun invoke(stimulus: Position.Change, done: () -> Unit) {
         game.gridActorRegistry
             .actorOf(stimulus.host)
-            .addAction(
+            ?.addAction(
                 Actions.sequence(
                     MoveToAction().apply {
                         x = stimulus.new.x.toFloat()
@@ -22,7 +22,7 @@ class RealThingMovementReaction(
                     },
                     Actions.run { done() }
                 )
-            )
+            ) ?: done()
     }
 
 }

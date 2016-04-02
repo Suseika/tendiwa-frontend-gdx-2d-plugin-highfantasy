@@ -60,7 +60,7 @@ internal class PlayerVisionChangeReaction(
             .filter { thing ->
                 difference.unseen.any { it == thing.aspect<Position>().tile }
             }
-            .forEach { game.gridActorRegistry.removeActor(it.aspect<Position>().tile, it) }
+            .forEach { game.gridActorRegistry.removeActor(it) }
     }
 
 }
